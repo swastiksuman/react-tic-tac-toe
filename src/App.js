@@ -1,24 +1,68 @@
-import React from 'react';
+import React, {useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { SSL_OP_SINGLE_DH_USE } from 'constants';
+
+const GridBox = (props) => (
+  <div className="box" onClick={() => props.onClick(props.value)}>{props.status}</div>
+);
 
 function App() {
+  const gridLength = 3;
+  const grids = [];
+  const [xSelected, setXSelected] = useState([]);
+  const [ySelected, setYSelected] = useState([]);
+  const [currentUser, setCurrentUser] = useState('x');
+  const winningGroups = [['1', '2', '3'], ['4', '5', '6'], ['7', '8', '9'], ['1', '5', '9'], ['3', '5', '7'], ['1', '4', '7'], ['3', '6', '9']];
+  const setGridValue = (i) => {
+    if(!(xSelected.includes(i) || ySelected.includes(i))){
+    if(currentUser == 'x'){
+      xSelected.push(i);
+      setXSelected(xSelected);
+      setCurrentUser('y');
+    }else{
+      ySelected.push(i);
+      setYSelected(ySelected);
+      setCurrentUser('x');
+    }
+    console.log(xSelected);
+    console.log(ySelected);
+    winningGroups.map((x) => {
+      var c = 0;
+      x.forEach(element => {
+        if(xSelected.includes(element)){
+          c=c+1;
+        }
+      });
+      if(c == 3){
+        console.log('wins');
+      }
+    });
+  }
+  };
+
+  const getGridStatus = (i) => {
+    console.log(i);
+
+    if(xSelected.includes(i)){
+      return 'x';
+    }
+
+    return '';
+  };
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="game-board">
+        <GridBox value='1' onClick={setGridValue}/>
+        <GridBox value='2' onClick={setGridValue}/>
+        <GridBox value='3' onClick={setGridValue}/>
+        <GridBox value='4' onClick={setGridValue}/>
+        <GridBox value='5' onClick={setGridValue}/>
+        <GridBox value='6' onClick={setGridValue}/>
+        <GridBox value='7' onClick={setGridValue}/>
+        <GridBox value='8' onClick={setGridValue}/>
+        <GridBox value='9' onClick={setGridValue}/>
+      </div>
     </div>
   );
 }
